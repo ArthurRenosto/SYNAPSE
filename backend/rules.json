@@ -1,0 +1,41 @@
+[
+  {
+    "id": "RCE_SUSPECT",
+    "description": "Possível tentativa de RCE (comandos perigosos)",
+    "severity": "critical",
+    "regex": "\\b(wget|curl|nc|netcat|bash|sh|powershell)\\b.*(http|https|\\|\\||;|&&)",
+    "recommendation": "Bloquear IP, revisar WAF/IDS, validar entradas e aplicar patches."
+  },
+  {
+    "id": "AUTH_FAILURE_BURST",
+    "description": "Falhas de autenticação múltiplas",
+    "severity": "high",
+    "regex": "(failed password|authentication failure|invalid credentials)",
+    "recommendation": "Habilitar bloqueio temporário, 2FA e alertas de brute force."
+  },
+  {
+    "id": "PERMISSION_DENIED",
+    "description": "Erro de permissionamento (acesso negado)",
+    "severity": "medium",
+    "regex": "(permission denied|acesso negado|unauthorized|forbidden|403)",
+    "recommendation": "Revisar permissões de arquivos/ACLs e aplicar least privilege."
+  },
+  {
+    "id": "MALWARE_IOC",
+    "description": "Indicador genérico de malware/IOC",
+    "severity": "high",
+    "regex": "(trojan|backdoor|malware|ransomware|c2|beacon)",
+    "recommendation": "Isolar host, rodar EDR/antivírus e caçar persistência."
+  },
+  {
+    "id": "SQLI",
+    "description": "Possível SQL Injection",
+    "severity": "high",
+    "regex": "(union select|or 1=1|sleep\\(\\d+\\)|xp_cmdshell)",
+    "recommendation": "Sanitizar entradas, queries parametrizadas e WAF."
+  }
+]
+
+
+
+
