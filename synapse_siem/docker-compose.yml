@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: siemuser
+      POSTGRES_PASSWORD: siempass
+      POSTGRES_DB: siemdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ..
+      dockerfile: synapse_siem/docker/backend.Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ..:/app
+      - ../logs:/app/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://siemuser:siempass@db:5432/siemdb
+      - DJANGO_SETTINGS_MODULE=synapse_siem.api.settings
+    working_dir: /app
+
+  frontend:
+    build:
+      context: ./frontend-mini
+      dockerfile: ../docker/frontend.Dockerfile
+    volumes:
+      - ./frontend-mini:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

@@ -5,6 +5,7 @@ media/
 staticfiles/
 reports/
 .venv/
+venv/
 .env
 
 

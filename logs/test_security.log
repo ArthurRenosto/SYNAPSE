@@ -1,0 +1,26 @@
+2025-09-09 14:30:15 INFO [auth] User admin logged in successfully from 192.168.1.100
+2025-09-09 14:30:45 INFO [web] GET /dashboard HTTP/1.1 200 - Mozilla/5.0
+2025-09-09 14:31:12 WARNING [auth] Failed login attempt for user 'root' from 10.0.0.50
+2025-09-09 14:31:15 WARNING [auth] Failed login attempt for user 'admin' from 10.0.0.50
+2025-09-09 14:31:18 ERROR [auth] Multiple failed login attempts from 10.0.0.50 - IP blocked
+2025-09-09 14:32:00 INFO [system] Database backup completed successfully
+2025-09-09 14:32:30 INFO [web] POST /api/users HTTP/1.1 201 - User created
+2025-09-09 14:33:45 WARNING [security] Suspicious file upload detected: shell.php from 192.168.1.200
+2025-09-09 14:34:12 ERROR [security] SQL injection attempt detected in parameter 'id'
+2025-09-09 14:34:15 INFO [firewall] Blocked connection from 192.168.1.200 to port 22
+2025-09-09 14:35:00 INFO [auth] User john logged out
+2025-09-09 14:35:30 WARNING [system] High CPU usage detected: 95%
+2025-09-09 14:36:00 INFO [web] GET /login HTTP/1.1 200 - Chrome/118.0
+2025-09-09 14:36:45 ERROR [auth] Brute force attack detected from 203.0.113.10
+2025-09-09 14:37:12 WARNING [security] Unauthorized access attempt to /admin/config
+2025-09-09 14:37:30 INFO [system] Memory usage: 78% - Normal operation
+2025-09-09 14:38:00 ERROR [network] Connection timeout to external service api.example.com
+2025-09-09 14:38:15 WARNING [auth] Password policy violation: weak password detected
+2025-09-09 14:39:00 INFO [backup] Incremental backup started
+2025-09-09 14:39:30 ERROR [security] Malware signature detected in uploaded file: virus.exe
+2025-09-09 14:40:00 INFO [system] System health check completed - All services running
+2025-09-09 14:40:15 WARNING [web] Rate limit exceeded for IP 198.51.100.25
+2025-09-09 14:40:45 ERROR [database] Connection pool exhausted - Max connections reached
+2025-09-09 14:41:00 INFO [auth] User alice logged in from 192.168.1.150
+2025-09-09 14:41:30 WARNING [security] Cross-site scripting attempt blocked
+2025-09-09 14:42:00 INFO [system] Scheduled maintenance completed successfully

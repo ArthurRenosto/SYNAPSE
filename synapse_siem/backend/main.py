@@ -10,9 +10,9 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-from backend.analyzer import LogAnalyzer
-from backend.report import ReportWriter
-from backend.utils import find_log_files, copy_logs_to_directory
+from synapse_siem.backend.analyzer import LogAnalyzer
+from synapse_siem.backend.report import ReportWriter
+from synapse_siem.backend.utils import find_log_files, copy_logs_to_directory
 
 
 def parse_args() -> argparse.Namespace:
