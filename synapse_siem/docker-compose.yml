@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: siemuser
+      POSTGRES_PASSWORD: siempass
+      POSTGRES_DB: siemdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./api:/app
+      - ./apps:/app/apps
+      - ./backend:/app/backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://siemuser:siempass@db:5432/siemdb
+
+  frontend:
+    build:
+      context: ./frontend-react
+      dockerfile: Dockerfile.react
+    volumes:
+      - ./frontend-react:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  db_data:
