@@ -3,7 +3,6 @@
 echo "🐳 SYNAPSE Docker Setup"
 echo "======================"
 
-cd synapse_siem
 
 # Build e start dos containers
 echo "📦 Building containers..."
@@ -19,6 +18,8 @@ docker compose exec backend python manage.py makemigrations
 
 echo "🔧 Running migrations..."
 docker compose exec backend python manage.py migrate
+
+sleep 5 # Aguarda mais um pouco para garantir que o banco de dados esteja pronto
 
 echo "✅ Setup complete!"
 echo ""
