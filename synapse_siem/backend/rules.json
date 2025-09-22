@@ -3,39 +3,91 @@
     "id": "RCE_SUSPECT",
     "description": "Possível tentativa de RCE (comandos perigosos)",
     "severity": "critical",
-    "regex": "\\b(wget|curl|nc|netcat|bash|sh|powershell)\\b.*(http|https|\\|\\||;|&&)",
+    "regex": "\\b(?:wget|curl|nc|netcat|bash|sh|powershell)\\b.*?(?:http|https|\\|\\||;|&&)",
     "recommendation": "Bloquear IP, revisar WAF/IDS, validar entradas e aplicar patches."
   },
   {
     "id": "AUTH_FAILURE_BURST",
     "description": "Falhas de autenticação múltiplas",
-    "severity": "high",
-    "regex": "(failed password|authentication failure|invalid credentials)",
+    "severity": "medium",
+    "regex": "(?:failed password|authentication failure|invalid credentials)",
     "recommendation": "Habilitar bloqueio temporário, 2FA e alertas de brute force."
   },
   {
     "id": "PERMISSION_DENIED",
     "description": "Erro de permissionamento (acesso negado)",
     "severity": "medium",
-    "regex": "(permission denied|acesso negado|unauthorized|forbidden|403)",
+    "regex": "(?:permission denied|acesso negado|unauthorized|forbidden|403)",
     "recommendation": "Revisar permissões de arquivos/ACLs e aplicar least privilege."
   },
   {
     "id": "MALWARE_IOC",
     "description": "Indicador genérico de malware/IOC",
-    "severity": "high",
-    "regex": "(trojan|backdoor|malware|ransomware|c2|beacon)",
+    "severity": "critical",
+    "regex": "(?:trojan|backdoor|malware|ransomware|c2|beacon)",
     "recommendation": "Isolar host, rodar EDR/antivírus e caçar persistência."
   },
   {
     "id": "SQLI",
     "description": "Possível SQL Injection",
     "severity": "high",
-    "regex": "(union select|or 1=1|sleep\\(\\d+\\)|xp_cmdshell)",
+    "regex": "(?:union select|or 1=1|sleep\\(\\d+\\)|xp_cmdshell)",
     "recommendation": "Sanitizar entradas, queries parametrizadas e WAF."
+  },
+  {
+    "id": "PROXY_PAC_FAILURE",
+    "description": "Falha na detecção automática de proxy ou no download do arquivo PAC.",
+    "severity": "medium",
+    "regex": "Failed to auto detect proxy or download PAC file",
+    "recommendation": "Verificar as configurações de proxy no sistema e na rede. Garantir que o servidor PAC esteja acessível e o arquivo de configuração esteja correto."
+  },
+  {
+    "id": "EMPTY_FILE_OR_CACHE",
+    "description": "Arquivo de cache de eventos ou gravação de vídeo (.avi) está vazio, indicando possível corrupção ou falha na escrita.",
+    "severity": "medium",
+    "regex": "(eventCache file: .* is empty|AVI file .* is empty)",
+    "recommendation": "Verificar a integridade do disco e as permissões de escrita. Investigar o processo que gera esses arquivos para identificar a causa da falha."
+  },
+  {
+    "id": "SERVICE_NOT_FOUND",
+    "description": "Tentativa de interagir com um serviço que não existe ou não está em execução.",
+    "severity": "high",
+    "regex": "service .* does not exist",
+    "recommendation": "Verificar se o serviço mencionado está instalado e configurado para iniciar automaticamente. Reinstalar o componente de software se necessário."
+  },
+  {
+    "id": "CYBERARK_RECORDING_FAILURE",
+    "description": "Falha na recuperação ou finalização de gravações de sessão do CyberArk PSM.",
+    "severity": "high",
+    "regex": "(failed to recover corrupted recording|Failed to finilize record file|Video finalize utility failed to finalize)",
+    "recommendation": "Verificar a integridade do disco no servidor PSM. Analisar os logs do componente de gravação para identificar a causa raiz da corrupção."
+  },
+  {
+    "id": "CYBERARK_VAULT_SESSION_ERROR",
+    "description": "Erros de sessão e acesso ao Vault do CyberArk, como objetos não encontrados, tickets de representação expirados ou objetos bloqueados.",
+    "severity": "high",
+    "regex": "(Failed to read parameters from vault file|Object .* doesn't exist|Impersonation ticket has expired|Object is locked by)",
+    "recommendation": "Verificar a conectividade com o Vault, o status dos componentes do CyberArk e as permissões do usuário. Analisar sessões ativas para identificar possíveis bloqueios de objetos."
+  },
+  {
+    "id": "CYBERARK_AUTH_POLICY_ERROR",
+    "description": "Falhas de autenticação e violações de política de senha no CyberArk.",
+    "severity": "critical",
+    "regex": "(Authentication failure for User|password does not meet the password policy requirements)",
+    "recommendation": "Revisar as políticas de senha configuradas no Vault. Investigar tentativas de acesso com credenciais inválidas."
+  },
+  {
+    "id": "BLOCKED_UDP_CONNECTION",
+    "description": "Conexão UDP bloqueada por uma regra de segurança ou firewall.",
+    "severity": "high",
+    "regex": "Blocking UDP connection from process",
+    "recommendation": "Analisar a necessidade da conexão UDP. Se for legítima, ajustar as regras de firewall para permitir a comunicação."
+  },
+  {
+    "id": "REGISTRY_ACCESS_FAILURE",
+    "description": "Falha ao tentar ler ou abrir uma chave do Registro do Windows.",
+    "severity": "critical",
+    "regex": "registry RegOpenKeyEx failed",
+    "recommendation": "Verificar as permissões de acesso à chave do Registro mencionada. Investigar se o software que está tentando o acesso tem os privilégios necessários."
   }
 ]
-
-
-
-

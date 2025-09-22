@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FileUploadParser
 from django.conf import settings
 from .models import LogFile, LogAnalysis, LogFinding
+from synapse_siem.backend.gemini_client import analyze_logs_with_gemini
 
 
 class LogAnalysisView(APIView):
@@ -346,3 +347,34 @@ class AnalysisHistoryView(APIView):
                 {"error": f"Erro ao listar histórico: {str(e)}"}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class GeminiAnalyzeView(APIView):
+    def post(self, request):
+        """Analisa conteúdo de logs via Gemini. Espera {"file_ids": [..]} ou {"logs": ["..."]}."""
+        try:
+            api_key = getattr(settings, 'GEMINI_API_KEY', '')
+            if not api_key:
+                return Response({"error": "GEMINI_API_KEY não configurada no servidor."}, status=status.HTTP_400_BAD_REQUEST)
+
+            logs: list[str] = []
+            file_ids = request.data.get('file_ids')
+            raw_logs = request.data.get('logs')
+
+            if isinstance(raw_logs, list) and raw_logs:
+                logs.extend([str(x) for x in raw_logs if isinstance(x, str)])
+
+            if isinstance(file_ids, list) and file_ids:
+                qs = LogFile.objects.filter(id__in=file_ids)
+                for lf in qs:
+                    if lf.content:
+                        logs.append(lf.content)
+
+            if not logs:
+                return Response({"error": "Envie 'logs' (lista de strings) ou 'file_ids' com arquivos importados."}, status=status.HTTP_400_BAD_REQUEST)
+
+            result = analyze_logs_with_gemini(api_key=api_key, logs=logs)
+            return Response(result, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": f"Falha na análise Gemini: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

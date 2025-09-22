@@ -11,6 +11,8 @@ docker compose build
 echo "🚀 Starting services..."
 docker compose up
 
+sleep 10
+
 echo "⏳ Waiting for database..."
 
 echo "🔧 Creating migrations..."

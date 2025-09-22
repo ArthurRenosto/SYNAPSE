@@ -110,3 +110,6 @@ REST_FRAMEWORK = {
 
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Gemini / Vertex AI (API Key via variável de ambiente)
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
