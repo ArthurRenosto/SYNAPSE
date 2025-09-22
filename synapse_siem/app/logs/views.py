@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FileUploadParser
 from django.conf import settings
 from .models import LogFile, LogAnalysis, LogFinding
-from synapse_siem.backend.gemini_client import analyze_logs_with_gemini
+from synapse_siem.backend.gemini_client import analyze_logs_with_gemini, analyze_logs_chunked
 
 
 class LogAnalysisView(APIView):
@@ -351,30 +351,62 @@ class AnalysisHistoryView(APIView):
 
 class GeminiAnalyzeView(APIView):
     def post(self, request):
-        """Analisa conteúdo de logs via Gemini. Espera {"file_ids": [..]} ou {"logs": ["..."]}."""
+        """Analisa arquivos selecionados via Gemini IA"""
         try:
             api_key = getattr(settings, 'GEMINI_API_KEY', '')
             if not api_key:
                 return Response({"error": "GEMINI_API_KEY não configurada no servidor."}, status=status.HTTP_400_BAD_REQUEST)
 
-            logs: list[str] = []
-            file_ids = request.data.get('file_ids')
-            raw_logs = request.data.get('logs')
-
-            if isinstance(raw_logs, list) and raw_logs:
-                logs.extend([str(x) for x in raw_logs if isinstance(x, str)])
-
-            if isinstance(file_ids, list) and file_ids:
-                qs = LogFile.objects.filter(id__in=file_ids)
-                for lf in qs:
-                    if lf.content:
-                        logs.append(lf.content)
-
-            if not logs:
-                return Response({"error": "Envie 'logs' (lista de strings) ou 'file_ids' com arquivos importados."}, status=status.HTTP_400_BAD_REQUEST)
-
-            result = analyze_logs_with_gemini(api_key=api_key, logs=logs)
+            selected_ids = request.data.get('file_ids', [])
+            
+            if not selected_ids:
+                return Response(
+                    {"error": "Nenhum arquivo selecionado para análise por IA"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            log_files = LogFile.objects.filter(id__in=selected_ids)
+            
+            if not log_files.exists():
+                return Response(
+                    {"error": "Arquivos não encontrados"}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # Lê conteúdo dos arquivos selecionados
+            logs_content = []
+            for log_file in log_files:
+                if log_file.content and log_file.content.strip():
+                    logs_content.append(log_file.content)
+            
+            if not logs_content:
+                return Response(
+                    {"error": "Nenhum conteúdo válido encontrado nos arquivos selecionados"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Tenta análise normal primeiro
+            try:
+                result = analyze_logs_with_gemini(api_key=api_key, logs=logs_content)
+                
+                # Se deu erro de quota, tenta análise em chunks
+                if result.get("error") == "quota_exceeded":
+                    print("[AVISO] Quota exceeded, tentando análise em chunks...")
+                    result = analyze_logs_chunked(api_key=api_key, logs=logs_content)
+                
+            except Exception as e:
+                # Fallback para análise em chunks se der erro
+                print(f"[AVISO] Erro na análise normal, tentando chunks: {e}")
+                result = analyze_logs_chunked(api_key=api_key, logs=logs_content)
+            
+            # Adiciona informações dos arquivos analisados
+            result["analyzed_files"] = [
+                {"id": f.id, "filename": f.filename, "size": f.size_bytes} 
+                for f in log_files
+            ]
+            result["total_files"] = len(log_files)
+            
             return Response(result, status=status.HTTP_200_OK)
 
         except Exception as e:
-            return Response({"error": f"Falha na análise Gemini: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": f"Falha na análise por IA: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -41,6 +41,12 @@ export const apiClient = {
     return response.data;
   },
 
+  // Análise por IA (Gemini)
+  runAIAnalysis: async (fileIds = []) => {
+    const response = await api.post('/logs/gemini/analyze/', { file_ids: fileIds });
+    return response.data;
+  },
+
   // Exporta resultado em JSON
   exportResults: (data, filename = 'synapse-analysis.json') => {
     const blob = new Blob([JSON.stringify(data, null, 2)], {

@@ -85,6 +85,21 @@
   background: #2563eb;
 }
 
+.sidebar-btn.ai-analyze {
+  background: #8b5cf6;
+  color: white;
+  margin-top: 8px;
+}
+
+.sidebar-btn.ai-analyze:hover:not(:disabled) {
+  background: #7c3aed;
+}
+
+.sidebar-btn.ai-analyze:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
 .sidebar-btn.todo {
   background: #f1f5f9;
   color: #64748b;
@@ -272,6 +287,85 @@
 .analysis-section,
 .trends-section,
 .findings-section,
+/* AI Analysis Section */
+.ai-analysis-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.ai-analysis-content {
+  margin-top: 16px;
+}
+
+.ai-analysis-header {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.ai-model, .ai-files, .ai-chunks, .ai-truncated {
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.ai-truncated {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ai-chunks {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.ai-analysis-output {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.ai-analysis-output pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #1e293b;
+}
+
+.ai-analyzed-files {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.ai-analyzed-files h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.ai-analyzed-files ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.ai-analyzed-files li {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
 .history-section {
   background: white;
   border-radius: 12px;

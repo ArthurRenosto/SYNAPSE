@@ -4,10 +4,12 @@ import './CTEMDashboard.css';
 
 export default function CTEMDashboard() {
   const [analysis, setAnalysis] = useState(null);
+  const [aiAnalysis, setAiAnalysis] = useState(null);
   const [availableFiles, setAvailableFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState(null);
   const [maturityScore, setMaturityScore] = useState(0);
   const fileInputRef = useRef(null);
@@ -64,6 +66,30 @@ export default function CTEMDashboard() {
       setError(errorMessage);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAIAnalysis = async () => {
+    setAiLoading(true);
+    setError(null);
+    try {
+      console.log('AI Analysis - Selected files:', selectedFiles);
+      const result = await apiClient.runAIAnalysis(selectedFiles);
+      console.log('AI Analysis result:', result);
+      setAiAnalysis(result);
+    } catch (err) {
+      console.error('AI Analysis error:', err);
+      let errorMessage = 'Erro na análise por IA';
+      
+      if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setAiLoading(false);
     }
   };
 
@@ -182,6 +208,14 @@ export default function CTEMDashboard() {
             >
               {loading ? '⏳ Analyzing...' : '🔍 Run Log Analysis'}
             </button>
+            
+            <button 
+              onClick={handleAIAnalysis} 
+              disabled={aiLoading || selectedFiles.length === 0}
+              className="sidebar-btn ai-analyze"
+            >
+              {aiLoading ? '⏳ AI Analyzing...' : '🤖 AI Analysis'}
+            </button>
           </div>
         </div>
 
@@ -198,9 +232,12 @@ export default function CTEMDashboard() {
               <span className="todo-badge">TODO</span>
             </button>
             
-            <button className="sidebar-btn todo" disabled>
-              🤖 AI Analysis
-              <span className="todo-badge">TODO</span>
+            <button 
+              onClick={handleAIAnalysis} 
+              disabled={aiLoading || selectedFiles.length === 0}
+              className="sidebar-btn ai-analyze"
+            >
+              {aiLoading ? '⏳ AI Analyzing...' : '🤖 AI Analysis'}
             </button>
           </div>
         </div>
@@ -424,6 +461,38 @@ export default function CTEMDashboard() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* AI Analysis Results */}
+          {aiAnalysis && (
+            <div className="ai-analysis-section">
+              <h2>🤖 AI Analysis Results</h2>
+              <div className="ai-analysis-content">
+                <div className="ai-analysis-header">
+                  <span className="ai-model">Model: {aiAnalysis.model || 'Gemini'}</span>
+                  <span className="ai-files">Files: {aiAnalysis.total_files || 0}</span>
+                  {aiAnalysis.chunks && (
+                    <span className="ai-chunks">Chunks: {aiAnalysis.successful_chunks || 0}/{aiAnalysis.chunks}</span>
+                  )}
+                  {aiAnalysis.truncated && (
+                    <span className="ai-truncated">⚠️ Truncated</span>
+                  )}
+                </div>
+                <div className="ai-analysis-output">
+                  <pre>{aiAnalysis.output || 'Nenhuma resposta do Gemini'}</pre>
+                </div>
+                {aiAnalysis.analyzed_files && (
+                  <div className="ai-analyzed-files">
+                    <h4>Arquivos analisados:</h4>
+                    <ul>
+                      {aiAnalysis.analyzed_files.map((file, index) => (
+                        <li key={index}>{file.filename} ({(file.size / 1024).toFixed(1)} KB)</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           )}
