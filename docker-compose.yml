@@ -12,12 +12,12 @@ services:
 
   backend:
     build:
-      context: ..
+      context: .
       dockerfile: synapse_siem/docker/backend.Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ..:/app
-      - ../logs:/app/logs
+      - .:/app
+      - ./logs:/app/logs
     ports:
       - "8000:8000"
     depends_on:
@@ -29,10 +29,10 @@ services:
 
   frontend:
     build:
-      context: ./frontend-mini
+      context: ./synapse_siem/frontend-mini
       dockerfile: ../docker/frontend.Dockerfile
     volumes:
-      - ./frontend-mini:/app
+      - ./synapse_siem/frontend-mini:/app
       - /app/node_modules
     ports:
       - "3000:3000"
