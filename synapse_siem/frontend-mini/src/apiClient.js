@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: '/api',
-  timeout: 30000,
 });
 
 export const apiClient = {
@@ -39,6 +38,12 @@ export const apiClient = {
   // Busca histórico de análises
   getHistory: async () => {
     const response = await api.get('/logs/history/');
+    return response.data;
+  },
+
+  // Análise por IA (Gemini)
+  runAIAnalysis: async (fileIds = []) => {
+    const response = await api.post('/logs/gemini/analyze/', { file_ids: fileIds });
     return response.data;
   },
 
