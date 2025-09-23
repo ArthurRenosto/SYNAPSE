@@ -1,6 +1,16 @@
 import './Sidebar.css';
 
-export default function Sidebar({ currentPage, onNavigate, fileInputRef, onFileUpload, loading }) {
+export default function Sidebar({ 
+  currentPage, 
+  onNavigate, 
+  fileInputRef, 
+  onFileUpload, 
+  loading,
+  onAnalyze,
+  onAIAnalysis,
+  aiLoading,
+  selectedFiles = []
+}) {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -23,17 +33,24 @@ export default function Sidebar({ currentPage, onNavigate, fileInputRef, onFileU
           <span className="nav-icon">📋</span>
           Imported Logs
         </button>
-
-        {currentPage === 'dashboard' && (
-          <button 
-            className={`nav-btn ${currentPage === 'ai-analysis' ? 'active' : ''}`}
-            onClick={() => onNavigate('ai-analysis')}
-          >
-            <span className="nav-icon">🤖</span>
-            AI Analysis
-          </button>
-        )}
       </div>
     </div>
   );
 }
+
+            
+// <button 
+//   onClick={handleAnalyze} 
+//   disabled={loading}
+//   className="sidebar-btn analyze"
+// >
+//   {loading ? '⏳ Analyzing...' : '🔍 Run Log Analysis'}
+// </button>
+
+// <button 
+//   onClick={handleAIAnalysis} 
+//   disabled={aiLoading || selectedFiles.length === 0}
+//   className="sidebar-btn ai-analyze"
+// >
+//   {aiLoading ? '⏳ AI Analyzing...' : '🤖 AI Analysis'}
+// </button>

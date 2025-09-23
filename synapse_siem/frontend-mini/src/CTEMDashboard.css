@@ -933,3 +933,45 @@
 .import-icon {
   font-size: 0.875rem;
 }
+/* Botão AI Analysis */
+.btn-ai-analyze {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  font-size: 1rem;
+}
+
+.btn-ai-analyze:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d28d9, #9333ea);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+}
+
+.btn-ai-analyze:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+/* Espaçamento para seção AI Analysis */
+.ai-analysis-section {
+  margin-top: 32px;
+}
+
+.ai-analysis-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+/* Width fixo para botões de análise */
+.btn-analyze {
+  width: 400px;
+  text-align: center;
+}

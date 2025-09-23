@@ -184,12 +184,16 @@ export default function CTEMDashboard({ onNavigate }) {
     <div className="ctem-dashboard">
       {/* Left Sidebar */}
       <Sidebar 
-       currentPage="dashboard"
-       onNavigate={onNavigate}
-       fileInputRef={fileInputRef}
-       onFileUpload={handleFileUpload}
-       loading={loading}
-     />
+      currentPage="dashboard"
+      onNavigate={onNavigate}
+      fileInputRef={fileInputRef}
+      onFileUpload={handleFileUpload}
+      loading={loading}
+      onAnalyze={handleAnalyze}
+      onAIAnalysis={handleAIAnalysis}
+      aiLoading={aiLoading}
+      selectedFiles={selectedFiles}
+    />
 
       {/* Main Content */}
       <div className="main-dashboard">
@@ -385,15 +389,30 @@ export default function CTEMDashboard({ onNavigate }) {
           
           {/* Analysis Control */}
           <div className="analysis-section">
-            <h2>📊 Log Analysis</h2>
-            <div className="analysis-controls">
-              <button 
-                onClick={handleAnalyze} 
-                disabled={loading}
-                className="btn-analyze"
-              >
-                {loading ? '⏳ Analyzing...' : '🔍 Run Security Analysis'}
-              </button>
+            <div className="ai-analysis-section">
+              <h2>📊 Log Analysis</h2>
+              <div className="analysis-controls">
+                <button 
+                  onClick={handleAnalyze} 
+                  disabled={loading || selectedFiles.length === 0}
+                  className="btn-analyze"
+                >
+                  {loading ? '⏳ Analyzing...' : '🔍 Run Security Analysis'}
+                </button>
+              </div>
+              </div>
+            
+            <div className="ai-analysis-section">
+              <h2>🤖 AI Analysis</h2>
+              <div className="analysis-controls">
+                <button 
+                  onClick={handleAIAnalysis} 
+                  disabled={aiLoading || selectedFiles.length === 0}
+                  className="btn-analyze"
+                >
+                  {aiLoading ? '⏳ AI Analyzing...' : '🤖 Run AI Analysis'}
+                </button>
+              </div>
             </div>
             
             {error && (
