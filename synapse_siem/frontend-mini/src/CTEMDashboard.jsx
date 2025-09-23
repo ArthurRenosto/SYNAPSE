@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { apiClient } from './apiClient';
 import './CTEMDashboard.css';
+import SeverityPieChart from './components/SeverityPieChart';
+import Sidebar from './components/Sidebar';
 
-export default function CTEMDashboard() {
+export default function CTEMDashboard({ onNavigate }) {
   const [analysis, setAnalysis] = useState(null);
   const [aiAnalysis, setAiAnalysis] = useState(null);
   const [availableFiles, setAvailableFiles] = useState([]);
@@ -181,67 +183,13 @@ export default function CTEMDashboard() {
   return (
     <div className="ctem-dashboard">
       {/* Left Sidebar */}
-      <div className="sidebar">
-        <div className="sidebar-section">
-          <h3>📊 Analysis Actions</h3>
-          
-          <div className="sidebar-actions">
-            <div className="upload-section">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".log,.txt,.json"
-                onChange={handleFileUpload}
-                disabled={loading}
-                className="file-input"
-                id="file-upload"
-              />
-              <label htmlFor="file-upload" className={`sidebar-btn upload ${loading ? 'disabled' : ''}`}>
-                📁 Import Log File
-              </label>
-            </div>
-            
-            <button 
-              onClick={handleAnalyze} 
-              disabled={loading}
-              className="sidebar-btn analyze"
-            >
-              {loading ? '⏳ Analyzing...' : '🔍 Run Log Analysis'}
-            </button>
-            
-            <button 
-              onClick={handleAIAnalysis} 
-              disabled={aiLoading || selectedFiles.length === 0}
-              className="sidebar-btn ai-analyze"
-            >
-              {aiLoading ? '⏳ AI Analyzing...' : '🤖 AI Analysis'}
-            </button>
-          </div>
-        </div>
-
-        <div className="sidebar-section">
-          <h3>🔧 Advanced Features</h3>
-          
-          <div className="sidebar-actions">
-            <button className="sidebar-btn todo" disabled>
-              📋 Imported Logs
-              <span className="todo-badge">TODO</span>
-            </button>
-            <button className="sidebar-btn todo" disabled>
-              🔍 Regex Analysis
-              <span className="todo-badge">TODO</span>
-            </button>
-            
-            <button 
-              onClick={handleAIAnalysis} 
-              disabled={aiLoading || selectedFiles.length === 0}
-              className="sidebar-btn ai-analyze"
-            >
-              {aiLoading ? '⏳ AI Analyzing...' : '🤖 AI Analysis'}
-            </button>
-          </div>
-        </div>
-      </div>
+      <Sidebar 
+       currentPage="dashboard"
+       onNavigate={onNavigate}
+       fileInputRef={fileInputRef}
+       onFileUpload={handleFileUpload}
+       loading={loading}
+     />
 
       {/* Main Content */}
       <div className="main-dashboard">
@@ -337,9 +285,47 @@ export default function CTEMDashboard() {
       {/* Main Content */}
       <div className="main-content">
         <div className="content-left">
+          {analysis ? (
+            <div className="trends-section">
+              <h2>🔍 Security Findings Overview</h2>
+              <SeverityPieChart analysis={analysis} />
+            </div>
+          ) : (
+            <div className="no-analysis-section">
+              <h2>📊 Security Analysis</h2>
+              <div className="no-analysis-content">
+                <div className="analysis-icon">📈</div>
+                <p>Execute uma análise de logs para visualizar o gráfico de segurança.</p>
+                <p className="analysis-hint">
+                  1. Importe arquivos de log<br/>
+                  2. Selecione os arquivos desejados<br/>
+                  3. Clique em "Run Security Analysis"
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+        
           {/* Imported Files Section */}
           <div className="files-section">
-            <h2>📁 Imported Log Files ({availableFiles.length})</h2>
+            <div className="files-header">
+              <h2>📁 Imported Log Files ({availableFiles.length})</h2>
+              <label 
+                htmlFor="file-upload-inline" 
+                className={`import-btn-inline ${loading ? 'disabled' : ''}`}
+              >
+                <span className="import-icon">📁</span>
+                Import Log
+              </label>
+              <input
+                type="file"
+                accept=".log,.txt,.json"
+                onChange={handleFileUpload}
+                disabled={loading}
+                className="file-input"
+                id="file-upload-inline"
+              />
+            </div>
             {availableFiles.length === 0 ? (
               <div className="no-files">
                 <p>Nenhum arquivo importado ainda.</p>
@@ -396,6 +382,7 @@ export default function CTEMDashboard() {
               </div>
             )}
           </div>
+          
           {/* Analysis Control */}
           <div className="analysis-section">
             <h2>📊 Log Analysis</h2>
@@ -415,31 +402,6 @@ export default function CTEMDashboard() {
               </div>
             )}
           </div>
-
-          {/* Security Trends */}
-          {analysis && (
-            <div className="trends-section">
-              <h2>🔍 Security Findings Overview</h2>
-              <div className="severity-breakdown">
-                {Object.entries(analysis.summary?.by_severity || {}).map(([severity, count]) => (
-                  <div key={severity} className="severity-item">
-                    <div 
-                      className="severity-bar"
-                      style={{ 
-                        backgroundColor: getSeverityColor(severity),
-                        width: `${(count / stats.total) * 100}%`
-                      }}
-                    ></div>
-                    <div className="severity-info">
-                      <span className="severity-name">{severity}</span>
-                      <span className="severity-count">{count}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
 
         <div className="content-right">
           {/* Recent Findings */}
