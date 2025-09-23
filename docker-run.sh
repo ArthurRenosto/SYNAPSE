@@ -3,23 +3,21 @@
 echo "🐳 SYNAPSE Docker Setup"
 echo "======================"
 
-
 # Build e start dos containers
 echo "📦 Building containers..."
 docker compose build
 
 echo "🚀 Starting services..."
-docker compose up
+docker compose up   
 
 echo "⏳ Waiting for database..."
+sleep 5
 
 echo "🔧 Creating migrations..."
 docker compose exec backend python manage.py makemigrations
 
 echo "🔧 Running migrations..."
 docker compose exec backend python manage.py migrate
-
-sleep 5 # Aguarda mais um pouco para garantir que o banco de dados esteja pronto
 
 echo "✅ Setup complete!"
 echo ""

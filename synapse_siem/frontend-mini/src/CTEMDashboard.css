@@ -650,3 +650,192 @@
   color: #1e40af;
   font-size: 0.875rem;
 }
+/* Pie Chart */
+.pie-chart-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.pie-chart {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pie-center {
+  background: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pie-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.pie-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legend-text {
+  font-size: 0.875rem;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.analysis-info p {
+  margin: 0;
+  color: #1e40af;
+  font-size: 0.875rem;
+}
+/* Centraliza botão de análise quando não há gráfico */
+.analysis-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+}
+
+.analysis-controls {
+  margin-top: 20px;
+}
+
+.btn-analyze {
+  padding: 16px 32px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-analyze:hover:not(:disabled) {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn-analyze:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Seção explicativa quando não há análise */
+.no-analysis-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+  padding: 40px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px dashed #cbd5e1;
+}
+
+.no-analysis-content {
+  max-width: 300px;
+}
+
+.analysis-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.no-analysis-section h2 {
+  color: #475569;
+  margin-bottom: 20px;
+}
+
+.no-analysis-section p {
+  color: #64748b;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.analysis-hint {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  font-style: italic;
+  text-align: left;
+}
+/* Header com botão inline */
+.files-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.files-header h2 {
+  margin: 0;
+  color: #1e293b;
+}
+
+.import-btn-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.import-btn-inline:hover:not(.disabled) {
+  background: #1d4ed8;
+}
+
+.import-btn-inline.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.import-icon {
+  font-size: 0.875rem;
+}

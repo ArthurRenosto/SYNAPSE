@@ -1,0 +1,29 @@
+PADRONIZAÇÃO DA SIDEBAR:
+
+1. COMPONENTE CRIADO: components/Sidebar.jsx
+   - Minimalista e reutilizável
+   - Navegação entre páginas
+   - Ações condicionais por página
+
+2. ATUALIZAR CTEMDashboard.jsx:
+   - Importar: import Sidebar from './components/Sidebar';
+   - Substituir toda a div.sidebar por:
+     <Sidebar 
+       currentPage="dashboard"
+       onNavigate={onNavigate}
+       fileInputRef={fileInputRef}
+       onFileUpload={handleFileUpload}
+       loading={loading}
+     />
+
+3. ATUALIZAR ImportedLogs.jsx:
+   - Importar: import Sidebar from './components/Sidebar';
+   - Substituir div.sidebar por:
+     <Sidebar 
+       currentPage="imported-logs"
+       onNavigate={onNavigate}
+     />
+
+4. REMOVER CSS antigo das sidebars dos arquivos individuais
+
+RESULTADO: Sidebar única, minimalista e consistente em ambas as páginas.
