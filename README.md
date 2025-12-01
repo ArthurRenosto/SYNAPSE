@@ -1,6 +1,6 @@
 # SYNAPSE SIEM
 
-Sistema de Gerenciamento de Eventos de Segurança da Informação (SIEM) com análise de logs usando IA.
+Sistema de Gerenciamento de Eventos de Segurança da Informação (SIEM) com análise de logs.
 
 ## 🚀 Instalação e Execução
 
